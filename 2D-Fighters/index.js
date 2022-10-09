@@ -12,6 +12,7 @@ class Sprite{
         this.position = position
         this.velocity = velocity
         this.height = 150
+        this.lastKey
     }
 
     createSprite() {
@@ -59,6 +60,9 @@ const keys = {
     },
     d: {
         pressed: false
+    },
+    w: {
+        pressed: false
     }
 } 
 let lastKey
@@ -72,11 +76,17 @@ function animate(){
     player2.update()
     //Set player velocity based on key presses, this will help smooth out the movement
     player1.velocity.x = 0
-
+    //Player1 movement
     if(keys.a.pressed && lastKey === 'a'){
-        player1.velocity.x = -1
+        player1.velocity.x = -4
     } else if (keys.d.pressed && lastKey === 'd'){
-        player1.velocity.x = 1
+        player1.velocity.x = 4
+    }
+    //Player2 movment
+    if(keys.ArrowLeft.pressed && player2.lastKey === 'ArrowLeft'){
+        player2.velocity.x = -4
+    } else if (keys.ArrowRight.pressed && player2.lastKey === 'ArrowRight'){
+        player2.velocity.x = 4
     }
 }
 animate()
@@ -91,6 +101,21 @@ window.addEventListener('keydown', (event)=> {
             keys.a.pressed = true
             lastKey = 'a'
             break
+        case 'w':
+            player1.velocity.y = -10
+            break
+        
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = true
+            player2.lastKey = 'ArrowRight'
+            break
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = true
+            player2.lastKey = 'ArrowLeft'
+            break
+        case 'ArrowUp':
+            player2.velocity.y = -10
+            break
             
     }
     console.log(event.key);
@@ -102,6 +127,14 @@ window.addEventListener('keyup', (event)=> {
             break
         case 'a':
             keys.a.pressed = false
+            break
+    }
+    switch(event.key){
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = false
+            break
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = false
             break
     }
     console.log(event.key);
