@@ -21,6 +21,7 @@ class Sprite{
 
     update() {
         this.createSprite()
+        this.position.x += this.velocity.x
         this.position.y += this.velocity.y
         if(this.position.y + this.height + this.velocity.y >= canvas.height){
             this.velocity.y = 0
@@ -29,8 +30,8 @@ class Sprite{
     }
     
 }
-
-const player = new Sprite({
+//Calling Sprite to specify spawn of player 1
+const player1 = new Sprite({
     position: {
         x: 0,
         y: 0
@@ -40,8 +41,8 @@ const player = new Sprite({
         y: 10
     }
 })
-
-const enemy = new Sprite({
+//Calling Sprite to specifu spawn of player 2
+const player2 = new Sprite({
     position: {
         x: 900,
         y: 0
@@ -52,12 +53,56 @@ const enemy = new Sprite({
     }
 })
 
+const keys = {
+    a: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    }
+} 
+let lastKey
+//Animate characters and Background
 function animate(){
     window.requestAnimationFrame(animate)
     //console.log('animate');
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    player.update()
-    enemy.update()
+    player1.update()
+    player2.update()
+    //Set player velocity based on key presses, this will help smooth out the movement
+    player1.velocity.x = 0
+
+    if(keys.a.pressed && lastKey === 'a'){
+        player1.velocity.x = -1
+    } else if (keys.d.pressed && lastKey === 'd'){
+        player1.velocity.x = 1
+    }
 }
 animate()
+//Moving Player based on Key Down and Key Up
+window.addEventListener('keydown', (event)=> {
+    switch(event.key){
+        case 'd':
+            keys.d.pressed = true
+            lastKey = 'd'
+            break
+        case 'a':
+            keys.a.pressed = true
+            lastKey = 'a'
+            break
+            
+    }
+    console.log(event.key);
+})
+window.addEventListener('keyup', (event)=> {
+    switch(event.key){
+        case 'd':
+            keys.d.pressed = false
+            break
+        case 'a':
+            keys.a.pressed = false
+            break
+    }
+    console.log(event.key);
+})
