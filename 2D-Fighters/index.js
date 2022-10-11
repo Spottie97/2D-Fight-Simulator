@@ -1,14 +1,16 @@
 const canvas = document.querySelector('canvas')
-// * c will be used a lot so we make it short.
+//c will be used a lot so we make it short.
 const c = canvas.getContext('2d')
 
 canvas.width = 1024
 canvas.height = 576
 
 c.fillRect(0, 0, canvas.width, canvas.height)
+
+//Gravity Element
 const gravity = 0.7
 class Sprite{
-    constructor({position, velocity}){
+    constructor({position, velocity, color = 'red'}){
         this.position = position
         this.velocity = velocity
         this.height = 150
@@ -18,16 +20,19 @@ class Sprite{
             width: 100,
             height: 50
         }
+        this.color = color
     }
 
+    //Create Player/Character class
     createSprite() {
-        c.fillStyle = 'red'
+        c.fillStyle = this.color
         c.fillRect(this.position.x, this.position.y, 50, this.height)
         c.fillStyle = 'green'
         //Create Hitbox here
         c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
     }
 
+    //Update Class
     update() {
         this.createSprite()
         this.position.x += this.velocity.x
@@ -59,9 +64,12 @@ const player2 = new Sprite({
     velocity: {
         x: 0,
         y: 10
-    }
+    },
+    color: 'blue'
 })
 
+
+//Default starting status of keys
 const keys = {
     a: {
         pressed: false
@@ -88,24 +96,35 @@ function animate(){
     c.fillRect(0, 0, canvas.width, canvas.height)
     player1.update()
     player2.update()
+
+
     //Set player velocity based on key presses, this will help smooth out the movement
     player1.velocity.x = 0
     player2.velocity.x = 0
+
+
     //Player1 movement
     if(keys.a.pressed && player1.lastKey === 'a'){
         player1.velocity.x = -4
     } else if (keys.d.pressed && player1.lastKey === 'd'){
         player1.velocity.x = 4
     }
+
+
     //Player2 movment
     if(keys.ArrowLeft.pressed && player2.lastKey === 'ArrowLeft'){
         player2.velocity.x = -4
     } else if (keys.ArrowRight.pressed && player2.lastKey === 'ArrowRight'){
         player2.velocity.x = 4
     }
+
+    //Detect Collision of Players
+
 }
 animate()
-//Moving Player based on Key Down and Key Up
+
+
+//Moving Player 1 based on Keys
 window.addEventListener('keydown', (event)=> {
     switch(event.key){
         case 'd':
@@ -135,6 +154,9 @@ window.addEventListener('keydown', (event)=> {
     }
     console.log(event.key);
 })
+
+
+//Moving Player 2 based on Keys
 window.addEventListener('keyup', (event)=> {
     switch(event.key){
         case 'd':
