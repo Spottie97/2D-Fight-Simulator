@@ -27,6 +27,7 @@ class Sprite{
         }
         this.color = color
         this.isAttacking
+        this.health = 100
     }
 
     //Create Player/Character class
@@ -164,7 +165,8 @@ function animate(){
         && player1.isAttacking
     )   {
         player1.isAttacking = false
-        console.log('hit Player 1')
+        player2.health -= 20
+        document.querySelector('#player2HP').style.width = player2.health + '%'
     }
 
     //Detect Collision of Players 2
@@ -172,7 +174,8 @@ function animate(){
         && player2.isAttacking
     )   {
         player2.isAttacking = false
-        console.log('hit Player 2')
+        player1.health -= 20
+        document.querySelector('#player1HP').style.width = player1.health + '%'
     }
 
 }
