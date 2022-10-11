@@ -6,18 +6,26 @@ canvas.width = 1024
 canvas.height = 576
 
 c.fillRect(0, 0, canvas.width, canvas.height)
-const gravity = 0.2
+const gravity = 0.7
 class Sprite{
     constructor({position, velocity}){
         this.position = position
         this.velocity = velocity
         this.height = 150
         this.lastKey
+        this.hitbox = {
+            position: this.position ,
+            width: 100,
+            height: 50,
+        }
     }
 
     createSprite() {
         c.fillStyle = 'red'
         c.fillRect(this.position.x, this.position.y, 50, this.height)
+
+        //Create Hitbox here
+        c.fillRect(this.hitbox.position.x,this.hitbox.position.y, this.hitbox.width, this.hitbox,this.height)
     }
 
     update() {
@@ -63,9 +71,15 @@ const keys = {
     },
     w: {
         pressed: false
+    },
+    ArrowLeft: {
+        pressed: false
+    },
+    ArrowRight: {
+        pressed: false
     }
+
 } 
-let lastKey
 //Animate characters and Background
 function animate(){
     window.requestAnimationFrame(animate)
@@ -76,10 +90,11 @@ function animate(){
     player2.update()
     //Set player velocity based on key presses, this will help smooth out the movement
     player1.velocity.x = 0
+    player2.velocity.x = 0
     //Player1 movement
-    if(keys.a.pressed && lastKey === 'a'){
+    if(keys.a.pressed && player1.lastKey === 'a'){
         player1.velocity.x = -4
-    } else if (keys.d.pressed && lastKey === 'd'){
+    } else if (keys.d.pressed && player1.lastKey === 'd'){
         player1.velocity.x = 4
     }
     //Player2 movment
@@ -95,14 +110,14 @@ window.addEventListener('keydown', (event)=> {
     switch(event.key){
         case 'd':
             keys.d.pressed = true
-            lastKey = 'd'
+            player1.lastKey = 'd'
             break
         case 'a':
             keys.a.pressed = true
-            lastKey = 'a'
+            player1.lastKey = 'a'
             break
         case 'w':
-            player1.velocity.y = -10
+            player1.velocity.y = -20
             break
         
         case 'ArrowRight':
@@ -114,7 +129,7 @@ window.addEventListener('keydown', (event)=> {
             player2.lastKey = 'ArrowLeft'
             break
         case 'ArrowUp':
-            player2.velocity.y = -10
+            player2.velocity.y = -20
             break
             
     }
