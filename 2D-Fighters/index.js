@@ -14,18 +14,18 @@ class Sprite{
         this.height = 150
         this.lastKey
         this.hitbox = {
-            position: this.position ,
+            position: this.position,
             width: 100,
-            height: 50,
+            height: 50
         }
     }
 
     createSprite() {
         c.fillStyle = 'red'
         c.fillRect(this.position.x, this.position.y, 50, this.height)
-
+        c.fillStyle = 'green'
         //Create Hitbox here
-        c.fillRect(this.hitbox.position.x,this.hitbox.position.y, this.hitbox.width, this.hitbox,this.height)
+        c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
     }
 
     update() {
