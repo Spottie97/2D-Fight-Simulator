@@ -132,8 +132,9 @@ function playerCollision({ player1HitBox, player2HitBox }) {
 }
 //Win condition function
 function winConditions({
-    player1, player2
+    player1, player2, timerID
 }){
+    clearTimeout(timerID)
     document.querySelector('#EndTextTie').style.display = 'flex'
     if(player1.health === player2.health){
         document.querySelector('#EndTextTie').innerHTML = 'Tie'
@@ -146,14 +147,15 @@ function winConditions({
 
 //Timer function
 let timer = 60
+let timerID
 function decreaseTimer(){
    if(timer > 0){
-     setTimeout(decreaseTimer, 1000)
+     timerID = setTimeout(decreaseTimer, 1000)
      timer--
      document.querySelector('#timer').innerHTML = timer
    } 
    if(timer === 0){
-        winConditions({player1, player2})
+        winConditions({player1, player2, timerID})
     }   
 }
 decreaseTimer()
@@ -208,7 +210,7 @@ function animate() {
   //End of Game conditions
   if(player2.health <= 0 || player1.health <= 0)
   {
-    winConditions({player1, player2})
+    winConditions({player1, player2, timerID})
   }
 }
 animate();
