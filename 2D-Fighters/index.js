@@ -15,7 +15,7 @@ const background = new Sprite({
         x: 0,
         y: 0
     },
-    imageSrc: './Assets/Background.png'
+    imageSrc: './Assets/BackgroundResized.png'
 })
 
 //Calling Sprite to specify spawn of player 1
