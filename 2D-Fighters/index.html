@@ -1,49 +1,76 @@
 <head>
-    <style>
-        * {
-         box-sizing: border-box;
-        }
-    </style>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
-    <!--Red Container div-->
-    <div style="position: relative; display: inline-block;">
-        <!--Smaller Red container div-->
-        <div style="position: absolute; display: flex; width: 100%; align-items: center; padding: 20px;">
-            <!--Player1 HP-->
-            <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end;">
-                <div style="background-color: yellow;
-                 height: 30px;
-                  width: 100%;">
-                </div>
-                <div id ="player1HP" style="position: absolute;
-                 background: blue;
-                 top: 0;
-                 right: 0;
-                 bottom: 0; 
-                 width: 100%;">
-                </div>
-            </div>
-            <div></div>
-            <!--Timer-->
-            <div style="background-color: red; height: 100px; width: 100px; flex-shrink: 0;"></div>
-            
-            <!--Player2 HP-->
-            <div style="position: relative; height: 30px; width: 100%">
-                <div style="background-color: yellow; height: 30px"></div>
-                <div id ="player2HP" style="position: absolute;
-                 background: blue;
-                 top: 0;
-                 right: 0;
-                 bottom: 0;
-                 left: 0">
-                </div>
-            </div>
-            <div></div>
-        </div>
-        <canvas></canvas>
+  <!--Red Container div-->
+  <div style="position: relative; display: inline-block">
+    <!--Smaller Red container div-->
+    <div
+      style="
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+      "
+    >
+      <!--Player1 HP-->
+      <div
+        style="
+          position: relative;
+          height: 30px;
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+        "
+      >
+        <div style="background-color: yellow; height: 30px; width: 100%"></div>
+        <div
+          id="player1HP"
+          style="
+            position: absolute;
+            background: blue;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+          "
+        ></div>
+      </div>
+      <div></div>
+      <!--Timer-->
+      <div
+        style="
+          background-color: red;
+          height: 100px;
+          width: 100px;
+          flex-shrink: 0;
+        "
+      ></div>
+
+      <!--Player2 HP-->
+      <div style="position: relative; height: 30px; width: 100%">
+        <div style="background-color: yellow; height: 30px"></div>
+        <div
+          id="player2HP"
+          style="
+            position: absolute;
+            background: blue;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+          "
+        ></div>
+      </div>
+      <div></div>
     </div>
+    <canvas></canvas>
+  </div>
 
-    <script src="index.js"></script>
+  <script src="index.js"></script>
 </body>
-
