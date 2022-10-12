@@ -11,22 +11,22 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 //Add Background
 const background = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    imageSrc: './Assets/BackgroundResized.png'
-})
-
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: "./Assets/BackgroundResized.png",
+});
+//Adding Herb Shop
 const shop = new Sprite({
   position: {
     x: 905,
-    y: 430
+    y: 430,
   },
-  imageSrc: './Assets/herbCropped.png',
+  imageSrc: "./Assets/herbCropped.png",
   scale: 1.9,
-  frameMax: 5
-})
+  frameMax: 5,
+});
 
 //Calling Sprite to specify spawn of player 1
 const player1 = new Fighter({
@@ -42,13 +42,31 @@ const player1 = new Fighter({
     x: 0,
     y: 0,
   },
-  imageSrc: './Assets/Player-1/Idle.png',
+  imageSrc: "./Assets/Player-1/Idle.png",
   frameMax: 4,
   scale: 1.9,
   offset: {
     x: 145,
-    y: 97
-  }
+    y: 97,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./Assets/Player-1/Idle.png",
+      frameMax: 4,
+    },
+    run: {
+      imageSrc: "./Assets/Player-1/Run.png",
+      frameMax: 8,
+    },
+    jump: {
+      imageSrc: "./Assets/Player-1/Jump.png",
+      frameMax: 2,
+    },
+    fall: {
+      imageSrc: "./Assets/Player-1/Fall.png",
+      frameMax: 2,
+    },
+  },
 });
 //Calling Sprite to specifu spawn of player 2
 const player2 = new Fighter({
@@ -86,7 +104,7 @@ const keys = {
   },
 };
 
-decreaseTimer()
+decreaseTimer();
 
 //Animate characters and Background
 function animate() {
@@ -94,20 +112,30 @@ function animate() {
   //console.log('animate');
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  background.update()
-  shop.update()
-  player1.update()
-  player2.update()
+  background.update();
+  shop.update();
+  player1.update();
+  //player2.update()
 
   //Set player velocity based on key presses, this will help smooth out the movement
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
   //Player1 movement
+
   if (keys.a.pressed && player1.lastKey === "a") {
     player1.velocity.x = -4;
+    player1.switchSprites("run");
   } else if (keys.d.pressed && player1.lastKey === "d") {
     player1.velocity.x = 4;
+    player1.switchSprites("run");
+  } else {
+    player1.switchSprites("idle");
+  }
+  if (player1.velocity.y < 0) {
+    player1.switchSprites("jump");
+  } else if (player1.velocity.y > 0) {
+    player1.switchSprites("fall");
   }
 
   //Player2 movment
@@ -138,9 +166,8 @@ function animate() {
   }
 
   //End of Game conditions
-  if(player2.health <= 0 || player1.health <= 0)
-  {
-    winConditions({player1, player2, timerID})
+  if (player2.health <= 0 || player1.health <= 0) {
+    winConditions({ player1, player2, timerID });
   }
 }
 animate();
@@ -157,7 +184,7 @@ window.addEventListener("keydown", (event) => {
       player1.lastKey = "a";
       break;
     case "w":
-      player1.velocity.y = -20;
+      player1.velocity.y = -15;
       break;
 
     case "ArrowRight":
@@ -169,7 +196,7 @@ window.addEventListener("keydown", (event) => {
       player2.lastKey = "ArrowLeft";
       break;
     case "ArrowUp":
-      player2.velocity.y = -20;
+      player2.velocity.y = -15;
       break;
     case " ":
       player1.attack();
