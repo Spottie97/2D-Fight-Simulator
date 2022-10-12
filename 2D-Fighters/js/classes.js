@@ -104,10 +104,13 @@ class Fighter extends Sprite {
     this.animateFrames();
     this.hitbox.position.x = this.position.x + this.hitbox.offset.x;
     this.hitbox.position.y = this.position.y;
+
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 48) {
-      this.velocity.y = 0;
+      this.velocity.y = 0
+      this.position.y = 378
     } else this.velocity.y += gravity;
   }
   //Attacking Class
