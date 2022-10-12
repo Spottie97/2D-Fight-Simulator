@@ -117,7 +117,7 @@ const keys = {
     pressed: false,
   },
 };
-
+//Collision Function with parameters/conditions incase of collision/contact.
 function playerCollision({ player1HitBox, player2HitBox }) {
   return (
     player1HitBox.hitbox.position.x + player1HitBox.hitbox.width >=
@@ -130,6 +130,33 @@ function playerCollision({ player1HitBox, player2HitBox }) {
       player2HitBox.position.y + player2HitBox.height
   );
 }
+//Win condition function
+function winConditions({
+    player1, player2
+}){
+    document.querySelector('#EndTextTie').style.display = 'flex'
+    if(player1.health === player2.health){
+        document.querySelector('#EndTextTie').innerHTML = 'Tie'
+    } else if(player1.health > player2.health){
+        document.querySelector('#EndTextTie').innerHTML = 'Player 1 Wins'
+    } else if(player1.health < player2.health){
+        document.querySelector('#EndTextTie').innerHTML = 'Player 2 Wins'
+    }
+}
+
+//Timer function
+let timer = 60
+function decreaseTimer(){
+   if(timer > 0){
+     setTimeout(decreaseTimer, 1000)
+     timer--
+     document.querySelector('#timer').innerHTML = timer
+   } 
+   if(timer === 0){
+        winConditions({player1, player2})
+    }   
+}
+decreaseTimer()
 
 //Animate characters and Background
 function animate() {
@@ -176,6 +203,12 @@ function animate() {
     player2.isAttacking = false;
     player1.health -= 20;
     document.querySelector("#player1HP").style.width = player1.health + "%";
+  }
+
+  //End of Game conditions
+  if(player2.health <= 0 || player1.health <= 0)
+  {
+    winConditions({player1, player2})
   }
 }
 animate();
