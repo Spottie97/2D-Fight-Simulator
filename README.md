@@ -2,6 +2,8 @@
 ## Description
 The game is based off other titles, such as Tekken and Mortal Combat. It is a 2D game that runs using a combination of code from Javascript and HTML. The aim of the game to fight your opponent and get his health bar to 0. Whom ever achieves this result the fastest is the winner. 
 This game is a 2 player game and do not have AI bots.
+![image](https://user-images.githubusercontent.com/65610257/195394169-fffa0d53-834b-4bef-816d-cea2a8f1a475.png)
+
 ## How to run/install
 This project is purly for fun and learning purposes and will not be publish. Feel free to download the repo and run the code through your vscode client. 
 - Instructions:
