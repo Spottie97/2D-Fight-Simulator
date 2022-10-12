@@ -18,6 +18,16 @@ const background = new Sprite({
     imageSrc: './Assets/BackgroundResized.png'
 })
 
+const shop = new Sprite({
+  position: {
+    x: 905,
+    y: 430
+  },
+  imageSrc: './Assets/herbCropped.png',
+  scale: 1.9,
+  frameMax: 5
+})
+
 //Calling Sprite to specify spawn of player 1
 const player1 = new Fighter({
   position: {
@@ -32,6 +42,13 @@ const player1 = new Fighter({
     x: 0,
     y: 0,
   },
+  imageSrc: './Assets/Player-1/Idle.png',
+  frameMax: 4,
+  scale: 1.9,
+  offset: {
+    x: 145,
+    y: 97
+  }
 });
 //Calling Sprite to specifu spawn of player 2
 const player2 = new Fighter({
@@ -78,6 +95,7 @@ function animate() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update()
+  shop.update()
   player1.update()
   player2.update()
 
