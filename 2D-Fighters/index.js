@@ -9,6 +9,15 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 //Gravity Element
 const gravity = 0.7;
+//Add Background
+const background = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc: './Assets/Background.png'
+})
+
 //Calling Sprite to specify spawn of player 1
 const player1 = new Fighter({
   position: {
@@ -108,8 +117,9 @@ function animate() {
   //console.log('animate');
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  player1.update();
-  player2.update();
+  background.update()
+  player1.update()
+  player2.update()
 
   //Set player velocity based on key presses, this will help smooth out the movement
   player1.velocity.x = 0;

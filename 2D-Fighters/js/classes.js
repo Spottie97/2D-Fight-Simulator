@@ -1,13 +1,18 @@
 class Sprite {
-    constructor({ position }) {
+    constructor({ position, imageSrc }) {
       this.position = position;
       this.height = 150;
       this.width = 50;
+      this.image = new Image()
+      this.image.src = imageSrc
   
     }
   
     //Create Player/Character class
-    createSprite(){}
+    createSprite(){
+      c.drawImage(this.image, this.position.x, this.position.y)
+
+    }
   
     //Update Class
     update() {
