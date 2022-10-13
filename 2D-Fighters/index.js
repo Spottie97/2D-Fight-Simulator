@@ -66,7 +66,11 @@ const player1 = new Fighter({
       imageSrc: "./Assets/Player-1/Fall.png",
       frameMax: 2,
     },
-  },
+    attack1: {
+      imageSrc: "./Assets/Player-1/Attack1.png",
+      frameMax: 4,
+    },
+  }
 });
 //Calling Sprite to specifu spawn of player 2
 const player2 = new Fighter({
@@ -83,6 +87,35 @@ const player2 = new Fighter({
     x: -50,
     y: 0,
   },
+  imageSrc: './Assets/Player-2/A/Idle.png',
+  frameMax: 8,
+  scale: 1.9,
+  offset: {
+    x: 145,
+    y: 82,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./Assets/Player-2/A/Idle.png",
+      frameMax: 8,
+    },
+    run: {
+      imageSrc: "./Assets/Player-2/A/Run.png",
+      frameMax: 8,
+    },
+    jump: {
+      imageSrc: "./Assets/Player-2/A/Jump.png",
+      frameMax: 2,
+    },
+    fall: {
+      imageSrc: "./Assets/Player-2/A/Fall.png",
+      frameMax: 2,
+    },
+    attack1: {
+      imageSrc: "./Assets/Player-2/A/Attack1.png",
+      frameMax: 6,
+    },
+  }
 });
 
 //Default starting status of keys
@@ -115,34 +148,42 @@ function animate() {
   background.update();
   shop.update();
   player1.update();
-  //player2.update()
+  player2.update()
 
   //Set player velocity based on key presses, this will help smooth out the movement
   player1.velocity.x = 0;
   player2.velocity.x = 0;
 
   //Player1 movement
-
   if (keys.a.pressed && player1.lastKey === "a") {
     player1.velocity.x = -4;
     player1.switchSprites("run");
   } else if (keys.d.pressed && player1.lastKey === "d") {
     player1.velocity.x = 4;
-    player1.switchSprites("run");
+    player1.switchSprites("run")
   } else {
-    player1.switchSprites("idle");
+    player1.switchSprites("idle")
   }
   if (player1.velocity.y < 0) {
     player1.switchSprites("jump");
   } else if (player1.velocity.y > 0) {
-    player1.switchSprites("fall");
+    player1.switchSprites("fall")
   }
 
   //Player2 movment
-  if (keys.ArrowLeft.pressed && player2.lastKey === "ArrowLeft") {
+  if (keys.ArrowLeft.pressed && player2.lastKey === 'ArrowLeft') {
     player2.velocity.x = -4;
-  } else if (keys.ArrowRight.pressed && player2.lastKey === "ArrowRight") {
+    player2.switchSprites('run')
+  } else if (keys.ArrowRight.pressed && player2.lastKey === 'ArrowRight') {
     player2.velocity.x = 4;
+    player2.switchSprites('run')
+  } else {
+    player2.switchSprites('idle')
+  }
+  if (player2.velocity.y < 0) {
+    player2.switchSprites('jump')
+  } else if (player1.velocity.y > 0) {
+    player2.switchSprites('fall')
   }
 
   //Detect Collision of Players 1
