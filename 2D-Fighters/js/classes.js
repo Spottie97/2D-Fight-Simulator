@@ -62,6 +62,7 @@ class Fighter extends Sprite {
     frameMax = 1,
     offset = { x: 0, y: 0 },
     sprites,
+    hitbox = { offset: {}, width: undefined, height: undefined },
   }) {
     super({
       position,
@@ -79,9 +80,9 @@ class Fighter extends Sprite {
         x: this.position.x,
         y: this.position.y,
       },
-      offset,
-      width: 100,
-      height: 50,
+      offset: hitbox.offset,
+      width: hitbox.width,
+      height: hitbox.height,
     };
     this.color = color;
     this.isAttacking;
@@ -95,7 +96,6 @@ class Fighter extends Sprite {
       sprites[sprite].image = new Image();
       sprites[sprite].image.src = sprites[sprite].imageSrc;
     }
-    console.log(this.sprites);
   }
 
   //Update Class
@@ -103,7 +103,14 @@ class Fighter extends Sprite {
     this.createSprite();
     this.animateFrames();
     this.hitbox.position.x = this.position.x + this.hitbox.offset.x;
-    this.hitbox.position.y = this.position.y;
+    this.hitbox.position.y = this.position.y + this.hitbox.offset.y;
+    //draw the attackbox
+    /*c.fillRect(
+      this.hitbox.position.x,
+      this.hitbox.position.y,
+      this.hitbox.width,
+      this.hitbox.height
+    );*/
 
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
@@ -117,17 +124,24 @@ class Fighter extends Sprite {
   attack() {
     this.switchSprites("attack1");
     this.isAttacking = true;
-    setTimeout(() => {
-      this.isAttacking = false;
-    }, 100);
+  }
+  takehit() {
+    this.switchSprites("takehit");
+    player2.health -= 20;
   }
   switchSprites(sprite) {
+    //Overwrite all other animations with attack animation
     if (
       this.image === this.sprites.attack1.image &&
       this.frameCurrent < this.sprites.attack1.frameMax - 1
     )
       return;
-      
+    //override when player gets hit
+    if (
+      this.image === this.sprites.takehit.image &&
+      this.frameCurrent < this.sprites.takehit.frameMax - 1
+    )
+      return;
     switch (sprite) {
       case "idle":
         if (this.image !== this.sprites.idle.image) {
@@ -161,6 +175,13 @@ class Fighter extends Sprite {
         if (this.image !== this.sprites.attack1.image) {
           this.image = this.sprites.attack1.image;
           this.frameMax = this.sprites.attack1.frameMax;
+          this.frameCurrent = 0;
+        }
+        break;
+      case "takehit":
+        if (this.image !== this.sprites.takehit.image) {
+          this.image = this.sprites.takehit.image;
+          this.frameMax = this.sprites.takehit.frameMax;
           this.frameCurrent = 0;
         }
         break;
