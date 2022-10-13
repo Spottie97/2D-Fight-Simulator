@@ -44,10 +44,10 @@ const player1 = new Fighter({
   },
   imageSrc: "./Assets/Player-1/Idle.png",
   frameMax: 4,
-  scale: 1.9,
+  scale: 2.1,
   offset: {
     x: 145,
-    y: 97,
+    y: 120,
   },
   sprites: {
     idle: {
@@ -70,9 +70,25 @@ const player1 = new Fighter({
       imageSrc: "./Assets/Player-1/Attack1.png",
       frameMax: 4,
     },
-  }
+    takehit: {
+      imageSrc: "./Assets/Player-1/Take hit.png",
+      frameMax: 3,
+    },
+    death: {
+      imageSrc: "./Assets/Player-1/Death.png",
+      frameMax: 7,
+    },
+  },
+  hitbox: {
+    offset: {
+      x: 90,
+      y: 60,
+    },
+    width: 132,
+    height: 50,
+  },
 });
-//Calling Sprite to specifu spawn of player 2
+//Calling Sprite to specific spawn of player 2
 const player2 = new Fighter({
   position: {
     x: 900,
@@ -87,12 +103,12 @@ const player2 = new Fighter({
     x: -50,
     y: 0,
   },
-  imageSrc: './Assets/Player-2/A/Idle.png',
+  imageSrc: "./Assets/Player-2/A/Idle.png",
   frameMax: 8,
-  scale: 1.9,
+  scale: 2.1,
   offset: {
     x: 145,
-    y: 82,
+    y: 105,
   },
   sprites: {
     idle: {
@@ -112,10 +128,26 @@ const player2 = new Fighter({
       frameMax: 2,
     },
     attack1: {
-      imageSrc: "./Assets/Player-2/A/Attack1.png",
+      imageSrc: "./Assets/Player-2/A/Attack2.png",
       frameMax: 6,
     },
-  }
+    takehit: {
+      imageSrc: "./Assets/Player-2/A/Take Hit - white silhouette.png",
+      frameMax: 4,
+    },
+    death: {
+      imageSrc: "./Assets/Player-2/D/Death.png",
+      frameMax: 6,
+    },
+  },
+  hitbox: {
+    offset: {
+      x: -170,
+      y: 60,
+    },
+    width: 185,
+    height: 50,
+  },
 });
 
 //Default starting status of keys
@@ -142,13 +174,12 @@ decreaseTimer();
 //Animate characters and Background
 function animate() {
   window.requestAnimationFrame(animate);
-  //console.log('animate');
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
   player1.update();
-  player2.update()
+  player2.update();
 
   //Set player velocity based on key presses, this will help smooth out the movement
   player1.velocity.x = 0;
@@ -160,50 +191,63 @@ function animate() {
     player1.switchSprites("run");
   } else if (keys.d.pressed && player1.lastKey === "d") {
     player1.velocity.x = 4;
-    player1.switchSprites("run")
+    player1.switchSprites("run");
   } else {
-    player1.switchSprites("idle")
+    player1.switchSprites("idle");
   }
   if (player1.velocity.y < 0) {
     player1.switchSprites("jump");
   } else if (player1.velocity.y > 0) {
-    player1.switchSprites("fall")
+    player1.switchSprites("fall");
   }
 
   //Player2 movment
-  if (keys.ArrowLeft.pressed && player2.lastKey === 'ArrowLeft') {
+  if (keys.ArrowLeft.pressed && player2.lastKey === "ArrowLeft") {
     player2.velocity.x = -4;
-    player2.switchSprites('run')
-  } else if (keys.ArrowRight.pressed && player2.lastKey === 'ArrowRight') {
+    player2.switchSprites("run");
+  } else if (keys.ArrowRight.pressed && player2.lastKey === "ArrowRight") {
     player2.velocity.x = 4;
-    player2.switchSprites('run')
+    player2.switchSprites("run");
   } else {
-    player2.switchSprites('idle')
+    player2.switchSprites("idle");
   }
   if (player2.velocity.y < 0) {
-    player2.switchSprites('jump')
-  } else if (player1.velocity.y > 0) {
-    player2.switchSprites('fall')
+    player2.switchSprites("jump");
+  } else if (player2.velocity.y > 0) {
+    player2.switchSprites("fall");
   }
 
-  //Detect Collision of Players 1
+  //Detect Collision of Players 1 & Player 2 hit
   if (
     playerCollision({ player1HitBox: player1, player2HitBox: player2 }) &&
-    player1.isAttacking
+    player1.isAttacking &&
+    player1.frameCurrent === 2
   ) {
+    player2.takehit()
     player1.isAttacking = false;
-    player2.health -= 20;
     document.querySelector("#player2HP").style.width = player2.health + "%";
   }
+  // if miss a hit
+  if (player1.isAttacking && player1.frameCurrent === 2) {
+    player1.isAttacking = false;
+  }
 
-  //Detect Collision of Players 2
+  //Detect Collision of Players 2 & Player 1 hit
   if (
     playerCollision({ player1HitBox: player2, player2HitBox: player1 }) &&
-    player2.isAttacking
+    player2.isAttacking &&
+    player2.frameCurrent === 2
   ) {
+    player1.takehit()
     player2.isAttacking = false;
     player1.health -= 20;
+    console.log("hit2");
     document.querySelector("#player1HP").style.width = player1.health + "%";
+  }
+
+  // if miss a hit
+  if (player2.isAttacking && player2.frameCurrent === 2) {
+    player2.isAttacking = false;
   }
 
   //End of Game conditions
@@ -215,36 +259,42 @@ animate();
 
 //Moving Player 1 based on KeyDown
 window.addEventListener("keydown", (event) => {
-  switch (event.key) {
-    case "d":
-      keys.d.pressed = true;
-      player1.lastKey = "d";
-      break;
-    case "a":
-      keys.a.pressed = true;
-      player1.lastKey = "a";
-      break;
-    case "w":
-      player1.velocity.y = -15;
-      break;
+  if(!player1.dead){
 
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      player2.lastKey = "ArrowRight";
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      player2.lastKey = "ArrowLeft";
-      break;
-    case "ArrowUp":
-      player2.velocity.y = -15;
-      break;
-    case " ":
-      player1.attack();
-      break;
-    case "Enter":
-      player2.attack();
-      break;
+    switch (event.key) {
+      case "d":
+        keys.d.pressed = true;
+        player1.lastKey = "d";
+        break;
+      case "a":
+        keys.a.pressed = true;
+        player1.lastKey = "a";
+        break;
+      case "w":
+        player1.velocity.y = -15;
+        break;
+      case " ":
+        player1.attack();
+        break;
+    }
+  }
+  if(!player2.dead){
+    switch(event.key){
+      case "ArrowRight":
+        keys.ArrowRight.pressed = true;
+        player2.lastKey = "ArrowRight";
+        break;
+      case "ArrowLeft":
+        keys.ArrowLeft.pressed = true;
+        player2.lastKey = "ArrowLeft";
+        break;
+      case "ArrowUp":
+        player2.velocity.y = -15;
+        break;
+      case "Enter":
+        player2.attack();
+        break;
+    }
   }
   //console.log(event.key);
 });

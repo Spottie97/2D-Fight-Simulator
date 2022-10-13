@@ -91,6 +91,7 @@ class Fighter extends Sprite {
     this.frameElapsed = 0;
     this.framesHold = 20;
     this.sprites = sprites;
+    this.dead = false
 
     for (const sprite in this.sprites) {
       sprites[sprite].image = new Image();
@@ -101,7 +102,8 @@ class Fighter extends Sprite {
   //Update Class
   update() {
     this.createSprite();
-    this.animateFrames();
+    if(!this.dead)
+      this.animateFrames();
     this.hitbox.position.x = this.position.x + this.hitbox.offset.x;
     this.hitbox.position.y = this.position.y + this.hitbox.offset.y;
     //draw the attackbox
@@ -126,10 +128,22 @@ class Fighter extends Sprite {
     this.isAttacking = true;
   }
   takehit() {
-    this.switchSprites("takehit");
-    player2.health -= 20;
+    if(this.health <=20)
+      this.switchSprites('death')
+    else
+      this.switchSprites('takehit')
+      player2.health -= 20;
   }
   switchSprites(sprite) {
+    if(this.image === this.sprites.death.image)
+      {
+        if(this.frameCurrent === this.sprites.death.frameMax -1)
+          this.dead = true
+        return
+      
+      }
+
+
     //Overwrite all other animations with attack animation
     if (
       this.image === this.sprites.attack1.image &&
@@ -182,6 +196,13 @@ class Fighter extends Sprite {
         if (this.image !== this.sprites.takehit.image) {
           this.image = this.sprites.takehit.image;
           this.frameMax = this.sprites.takehit.frameMax;
+          this.frameCurrent = 0;
+        }
+        break;
+      case "death":
+        if (this.image !== this.sprites.death.image) {
+          this.image = this.sprites.death.image;
+          this.frameMax = this.sprites.death.frameMax;
           this.frameCurrent = 0;
         }
         break;
