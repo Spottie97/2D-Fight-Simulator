@@ -77,7 +77,7 @@ const player1 = new Fighter({
     death: {
       imageSrc: "./Assets/Player-1/Death.png",
       frameMax: 7,
-    },
+    }
   },
   hitbox: {
     offset: {
@@ -138,7 +138,7 @@ const player2 = new Fighter({
     death: {
       imageSrc: "./Assets/Player-2/D/Death.png",
       frameMax: 6,
-    },
+    }
   },
   hitbox: {
     offset: {
@@ -223,7 +223,7 @@ function animate() {
     player1.isAttacking &&
     player1.frameCurrent === 2
   ) {
-    player2.takehit()
+    player2.takehit();
     player1.isAttacking = false;
     document.querySelector("#player2HP").style.width = player2.health + "%";
   }
@@ -238,10 +238,8 @@ function animate() {
     player2.isAttacking &&
     player2.frameCurrent === 2
   ) {
-    player1.takehit()
+    player1.takehit();
     player2.isAttacking = false;
-    player1.health -= 20;
-    console.log("hit2");
     document.querySelector("#player1HP").style.width = player1.health + "%";
   }
 
@@ -259,8 +257,7 @@ animate();
 
 //Moving Player 1 based on KeyDown
 window.addEventListener("keydown", (event) => {
-  if(!player1.dead){
-
+  if (!player1.dead) {
     switch (event.key) {
       case "d":
         keys.d.pressed = true;
@@ -278,8 +275,8 @@ window.addEventListener("keydown", (event) => {
         break;
     }
   }
-  if(!player2.dead){
-    switch(event.key){
+  if (!player2.dead) {
+    switch (event.key) {
       case "ArrowRight":
         keys.ArrowRight.pressed = true;
         player2.lastKey = "ArrowRight";
