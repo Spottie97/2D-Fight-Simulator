@@ -8,7 +8,7 @@
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Press Start 2P', cursive;
+      font-family: "Press Start 2P", cursive;
     }
   </style>
 </head>
@@ -110,9 +110,86 @@
       Tie
     </div>
     <canvas></canvas>
+    <div
+      style="
+        background-color: black;
+        height: 200px;
+        width: 1024px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        border: 4px solid gold;
+      "
+    >
+      <div
+        style="
+          background-color: black;
+          position: absolute;
+          top: 576;
+          bottom: 0;
+          left: 0;
+          height: 200px;
+          width: 512px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: left ;
+          justify-content: left;
+          color: white;
+          border: 4px solid gold;
+        "
+      ><p>
+        <pre>Controls for Player 1:
+
+        Jump: W
+
+        Move Left: A
+
+        Move Right: D
+
+        Attack: Space Bar
+        </pre>
+      </p></div>
+      <div
+        style="
+          background-color: black;
+          position: absolute;
+          top: 576;
+          bottom: 0;
+          right: 0;
+          height: 200px;
+          width: 512px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: left ;
+          justify-content: left;
+          color: white;
+          border: 4px solid gold;
+        "
+      >
+      <p>
+        <pre>Controls for Player 2:
+
+        Jump: Up Arrow
+
+        Move Left: Left Arrow
+
+        Move Right: Right Arrow
+
+        Attack: Enter
+        </pre>
+      </p>
+  </div>
+    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"
+    integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
   <script src="js/utilities.js"></script>
   <script src="js/classes.js"></script>
   <script src="index.js"></script>
