@@ -1,7 +1,14 @@
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
   <style>
     * {
       box-sizing: border-box;
+      font-family: 'Press Start 2P', cursive;
     }
   </style>
 </head>
@@ -22,10 +29,12 @@
       <div
         style="
           position: relative;
-          height: 30px;
           width: 100%;
           display: flex;
           justify-content: flex-end;
+          border-top: 4px solid gold;
+          border-left: 4px solid gold;
+          border-bottom: 4px solid gold;
         "
       >
         <div style="background-color: red; height: 30px; width: 100%"></div>
@@ -33,7 +42,7 @@
           id="player1HP"
           style="
             position: absolute;
-            background: blue;
+            background: #67e8f9;
             top: 0;
             right: 0;
             bottom: 0;
@@ -45,26 +54,36 @@
       <div
         id="timer"
         style="
-          background-color: red;
-          height: 100px;
+          background-color: black;
+          height: 50px;
           width: 100px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
+          color: white;
+          border: 4px solid gold;
         "
       >
         10
       </div>
 
       <!--Player2 HP-->
-      <div style="position: relative; height: 30px; width: 100%">
+      <div
+        style="
+          position: relative;
+          width: 100%;
+          border-top: 4px solid gold;
+          border-right: 4px solid gold;
+          border-bottom: 4px solid gold;
+        "
+      >
         <div style="background-color: red; height: 30px"></div>
         <div
           id="player2HP"
           style="
             position: absolute;
-            background: blue;
+            background: #67e8f9;
             top: 0;
             right: 0;
             bottom: 0;
@@ -75,7 +94,7 @@
       <div></div>
     </div>
     <div
-    id="EndTextTie"
+      id="EndTextTie"
       style="
         position: absolute;
         color: white;
@@ -85,13 +104,15 @@
         right: 0;
         bottom: 0;
         left: 0;
-        display: none;"
+        display: none;
+      "
     >
       Tie
     </div>
     <canvas></canvas>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/utilities.js"></script>
   <script src="js/classes.js"></script>
   <script src="index.js"></script>

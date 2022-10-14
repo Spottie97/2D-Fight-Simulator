@@ -178,6 +178,8 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
+  c.fillStyle = 'rgba(255,255,255,0.15)'
+  c.fillRect(0,0,canvas.width, canvas.height)
   player1.update();
   player2.update();
 
@@ -225,7 +227,9 @@ function animate() {
   ) {
     player2.takehit();
     player1.isAttacking = false;
-    document.querySelector("#player2HP").style.width = player2.health + "%";
+    gsap.to('#player2HP', {
+      width: player2.health + "%"
+    })
   }
   // if miss a hit
   if (player1.isAttacking && player1.frameCurrent === 2) {
@@ -240,7 +244,9 @@ function animate() {
   ) {
     player1.takehit();
     player2.isAttacking = false;
-    document.querySelector("#player1HP").style.width = player1.health + "%";
+    gsap.to('#player1HP', {
+      width: player1.health + "%"
+    })
   }
 
   // if miss a hit
