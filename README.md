@@ -17,8 +17,12 @@ This project is purly for fun and learning purposes and will not be publish. Fee
 - Instructions:
   1. Download/Clone the Repository
   2. Open the Repository using any prefered IDE. I prefer VScode.
-  3. Once opened you can simply run the code and it should take you to a browser where you can interact with the game.
+  3. Once opened you can simply run the HTML index file/code and it should take you to a browser where you can interact with the game.
   4. Enjoy!
+  
+ OR
+ 
+ You can test out the game <a href="https://spiffy-frangipane-8eb0c2.netlify.app/">here</a>
 ## Purpose of the Project
 The purpose of this project was to improve my skills in Javascript and HTML. I wanted to see if I could code a working game using these programming languages, as I was still new to them. It would also give me the chance to create my first ever browser based game outside of Unity or Unreal. 
 ## Planning
