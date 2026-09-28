@@ -1,4 +1,3 @@
-//Element Creation
 class Sprite {
   constructor({
     position,
@@ -20,7 +19,6 @@ class Sprite {
     this.offset = offset;
   }
 
-  //create Background Elements
   createSprite() {
     c.drawImage(
       this.image,
@@ -34,35 +32,40 @@ class Sprite {
       this.image.height * this.scale
     );
   }
+
   animateFrames() {
-    this.frameElapsed++;
+    this.frameElapsed += 1;
     if (this.frameElapsed % this.framesHold === 0) {
       if (this.frameCurrent < this.frameMax - 1) {
-        this.frameCurrent++;
+        this.frameCurrent += 1;
       } else {
         this.frameCurrent = 0;
       }
     }
   }
 
-  //Update Class
   update() {
-    this.createSprite();
     this.animateFrames();
   }
+
+  draw() {
+    this.createSprite();
+  }
 }
-//Fighter Class
+
 class Fighter extends Sprite {
   constructor({
     position,
     velocity,
-    color = "red",
     imageSrc,
     scale = 1,
     frameMax = 1,
     offset = { x: 0, y: 0 },
     sprites,
-    hitbox = { offset: {}, width: undefined, height: undefined },
+    hitbox,
+    nativeFacing,
+    deathFacing = nativeFacing,
+    controls,
   }) {
     super({
       position,
@@ -74,143 +77,184 @@ class Fighter extends Sprite {
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
-    this.lastKey;
+    this.lastKey = null;
+    this.attackBox = {
+      offset: { x: hitbox.offset.x, y: hitbox.offset.y },
+      width: hitbox.width,
+      height: hitbox.height,
+    };
     this.hitbox = {
       position: {
         x: this.position.x,
         y: this.position.y,
       },
-      offset: hitbox.offset,
       width: hitbox.width,
       height: hitbox.height,
     };
-    this.color = color;
-    this.isAttacking;
+    this.isAttacking = false;
+    this.isGrounded = false;
     this.health = 100;
-    this.frameCurrent = 0;
-    this.frameElapsed = 0;
     this.framesHold = 5;
     this.sprites = sprites;
     this.dead = false;
+    this.nativeFacing = nativeFacing;
+    this.deathFacing = deathFacing;
+    this.facing = nativeFacing;
+    this.controls = controls;
+    this.spawn = {
+      x: position.x,
+      y: position.y,
+      velocityY: velocity.y,
+    };
 
-    for (const sprite in this.sprites) {
-      sprites[sprite].image = new Image();
-      sprites[sprite].image.src = sprites[sprite].imageSrc;
+    for (const name in this.sprites) {
+      this.sprites[name].image = new Image();
+      this.sprites[name].image.src = this.sprites[name].imageSrc;
     }
+
+    this.image = this.sprites.idle.image;
+    this.frameMax = this.sprites.idle.frameMax;
   }
 
-  //Update Class
-  update() {
-    this.createSprite();
-    if (!this.dead) {
-      this.animateFrames();
+  // Sprites are mirrored around the drawn frame, which is where the art sits.
+  spriteCenterX() {
+    const frameWidth = (this.image.width / this.frameMax) * this.scale;
+    return this.position.x - this.offset.x + frameWidth / 2;
+  }
+
+  currentArtFacing() {
+    if (this.image === this.sprites.death.image) return this.deathFacing;
+    return this.nativeFacing;
+  }
+
+  updateHitbox() {
+    const rightX = this.position.x + this.attackBox.offset.x;
+    if (this.facing === 1) {
+      this.hitbox.position.x = rightX;
+    } else {
+      const rightEdge = rightX + this.attackBox.width;
+      this.hitbox.position.x = this.spriteCenterX() * 2 - rightEdge;
     }
-    this.hitbox.position.x = this.position.x + this.hitbox.offset.x;
-    this.hitbox.position.y = this.position.y + this.hitbox.offset.y;
-    //draw the attackbox
-    /*c.fillRect(
-      this.hitbox.position.x,
-      this.hitbox.position.y,
-      this.hitbox.width,
-      this.hitbox.height
-    );*/
+    this.hitbox.position.y = this.position.y + this.attackBox.offset.y;
+  }
+
+  update() {
+    if (!this.dead) this.animateFrames();
+
+    if (
+      this.image === this.sprites.death.image &&
+      this.frameCurrent === this.sprites.death.frameMax - 1
+    ) {
+      this.dead = true;
+    }
 
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y >= canvas.height - 48) {
+    const maxX = canvas.width - this.width;
+    if (this.position.x < 0) this.position.x = 0;
+    else if (this.position.x > maxX) this.position.x = maxX;
+
+    if (this.position.y + this.velocity.y >= GROUND_Y) {
       this.velocity.y = 0;
-      this.position.y = 378;
-    } else this.velocity.y += gravity;
+      this.position.y = GROUND_Y;
+      this.isGrounded = true;
+    } else {
+      this.velocity.y += gravity;
+      this.isGrounded = false;
+    }
+
+    this.updateHitbox();
   }
-  //Attacking Class
+
+  draw() {
+    c.save();
+    if (this.facing !== this.currentArtFacing()) {
+      const centerX = this.spriteCenterX();
+      c.translate(centerX, 0);
+      c.scale(-1, 1);
+      c.translate(-centerX, 0);
+    }
+    this.createSprite();
+    c.restore();
+  }
+
+  faceOpponent(opponent) {
+    if (this.dead || this.isAttacking) return;
+    const myCenter = this.position.x + this.width / 2;
+    const theirCenter = opponent.position.x + opponent.width / 2;
+    if (theirCenter < myCenter) this.facing = -1;
+    else if (theirCenter > myCenter) this.facing = 1;
+  }
+
+  jump() {
+    if (gameState !== "fighting" || this.dead || !this.isGrounded) return;
+    this.velocity.y = -15;
+    this.isGrounded = false;
+  }
+
   attack() {
-    this.switchSprites("attack1");
+    if (gameState !== "fighting" || this.dead || this.isAttacking) return;
+    if (this.isSpriteLocked("attack1") || this.isSpriteLocked("takehit")) return;
+    this.applySprite("attack1", true);
     this.isAttacking = true;
   }
-  takehit() {
-    this.health -= 20;
 
-    if (this.health <= 0) {
-      this.switchSprites("death");
-    } else {
-      this.switchSprites("takehit");
-    }
+  takeHit(damage) {
+    this.health = Math.max(0, this.health - damage);
+    if (this.health <= 0) this.switchSprites("death");
+    else this.switchSprites("takehit");
   }
-  switchSprites(sprite) {
+
+  isSpriteLocked(name) {
+    const sprite = this.sprites[name];
+    return (
+      this.image === sprite.image && this.frameCurrent < sprite.frameMax - 1
+    );
+  }
+
+  applySprite(name, restart) {
+    const sprite = this.sprites[name];
+    if (!sprite) return;
+    const sameImage = this.image === sprite.image;
+    if (sameImage && !restart) return;
+    if (!sameImage && this.image === this.sprites.attack1.image) {
+      this.isAttacking = false;
+    }
+    this.image = sprite.image;
+    this.frameMax = sprite.frameMax;
+    this.frameCurrent = 0;
+    this.frameElapsed = 0;
+  }
+
+  switchSprites(name) {
     if (this.image === this.sprites.death.image) {
-      if (this.frameCurrent === this.sprites.death.frameMax - 1) {
-        this.dead = true;
-      }
+      if (this.frameCurrent === this.sprites.death.frameMax - 1) this.dead = true;
       return;
     }
 
-    //Overwrite all other animations with attack animation
-    if (
-      this.image === this.sprites.attack1.image &&
-      this.frameCurrent < this.sprites.attack1.frameMax - 1
-    ) {
-      return;
+    if (name !== "death") {
+      if (this.isSpriteLocked("attack1")) return;
+      if (this.isSpriteLocked("takehit")) return;
     }
 
-    //override when player gets hit
-    if (
-      this.image === this.sprites.takehit.image &&
-      this.frameCurrent < this.sprites.takehit.frameMax - 1
-    ) {
-      return;
-    }
+    const restart = name === "attack1" || name === "takehit" || name === "death";
+    this.applySprite(name, restart);
+    if (name === "death") this.isAttacking = false;
+  }
 
-    switch (sprite) {
-      case "idle":
-        if (this.image !== this.sprites.idle.image) {
-          this.image = this.sprites.idle.image;
-          this.frameMax = this.sprites.idle.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "run":
-        if (this.image !== this.sprites.run.image) {
-          this.image = this.sprites.run.image;
-          this.frameMax = this.sprites.run.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "jump":
-        if (this.image !== this.sprites.jump.image) {
-          this.image = this.sprites.jump.image;
-          this.frameMax = this.sprites.jump.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "fall":
-        if (this.image !== this.sprites.fall.image) {
-          this.image = this.sprites.fall.image;
-          this.frameMax = this.sprites.fall.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "attack1":
-        if (this.image !== this.sprites.attack1.image) {
-          this.image = this.sprites.attack1.image;
-          this.frameMax = this.sprites.attack1.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "takehit":
-        if (this.image !== this.sprites.takehit.image) {
-          this.image = this.sprites.takehit.image;
-          this.frameMax = this.sprites.takehit.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-      case "death":
-        if (this.image !== this.sprites.death.image) {
-          this.image = this.sprites.death.image;
-          this.frameMax = this.sprites.death.frameMax;
-          this.frameCurrent = 0;
-        }
-        break;
-    }
+  reset() {
+    this.position.x = this.spawn.x;
+    this.position.y = this.spawn.y;
+    this.velocity.x = 0;
+    this.velocity.y = this.spawn.velocityY;
+    this.health = 100;
+    this.dead = false;
+    this.isAttacking = false;
+    this.isGrounded = false;
+    this.facing = this.nativeFacing;
+    this.lastKey = null;
+    this.applySprite("idle", true);
+    this.updateHitbox();
   }
 }

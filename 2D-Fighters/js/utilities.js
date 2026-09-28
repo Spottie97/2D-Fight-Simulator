@@ -1,39 +1,86 @@
-//Collision Function with parameters/conditions incase of collision/contact.
-function playerCollision({ player1HitBox, player2HitBox }) {
+const gravity = 0.7;
+const GROUND_Y = 378;
+const ROUND_TIME = 60;
+const STEPS_PER_SECOND = 60;
+
+let gameState = "loading";
+let timer = ROUND_TIME;
+let timerSteps = 0;
+
+function playerCollision({ attacker, defender }) {
+  const box = attacker.hitbox;
   return (
-    player1HitBox.hitbox.position.x + player1HitBox.hitbox.width >=
-      player2HitBox.position.x &&
-    player1HitBox.hitbox.position.x <=
-      player2HitBox.position.x + player2HitBox.width &&
-    player1HitBox.hitbox.position.y + player1HitBox.hitbox.height >=
-      player2HitBox.position.y &&
-    player1HitBox.hitbox.position.y <=
-      player2HitBox.position.y + player2HitBox.height
+    box.position.x + box.width >= defender.position.x &&
+    box.position.x <= defender.position.x + defender.width &&
+    box.position.y + box.height >= defender.position.y &&
+    box.position.y <= defender.position.y + defender.height
   );
 }
-//Win condition function
-function winConditions({ player1, player2, timerID }) {
-  clearTimeout(timerID);
-  document.querySelector("#EndTextTie").style.display = "flex";
-  if (player1.health === player2.health) {
-    document.querySelector("#EndTextTie").innerHTML = "Tie";
-  } else if (player1.health > player2.health) {
-    document.querySelector("#EndTextTie").innerHTML = "Player 1 Wins";
-  } else if (player1.health < player2.health) {
-    document.querySelector("#EndTextTie").innerHTML = "Player 2 Wins";
+
+function tickTimer() {
+  if (gameState !== "fighting" || timer <= 0) return;
+  timerSteps += 1;
+  if (timerSteps < STEPS_PER_SECOND) return;
+  timerSteps = 0;
+  timer -= 1;
+  document.querySelector("#timer").textContent = String(timer);
+}
+
+function standDown(fighter) {
+  if (fighter.health <= 0 || fighter.image === fighter.sprites.death.image) return;
+  fighter.isAttacking = false;
+  if (fighter.image !== fighter.sprites.idle.image) {
+    fighter.applySprite("idle", true);
   }
 }
 
-//Timer function
-let timer = 60;
-let timerID;
-function decreaseTimer() {
-  if (timer > 0) {
-    timerID = setTimeout(decreaseTimer, 1000);
-    timer--;
-    document.querySelector("#timer").innerHTML = timer;
+function endRound() {
+  if (gameState !== "fighting") return;
+  gameState = "over";
+  standDown(player1);
+  standDown(player2);
+
+  const title = document.querySelector("#resultTitle");
+  if (player1.health === player2.health) {
+    title.textContent = "Tie";
+  } else if (player1.health > player2.health) {
+    title.textContent = "Player 1 Wins";
+  } else {
+    title.textContent = "Player 2 Wins";
   }
-  if (timer === 0) {
-    winConditions({ player1, player2, timerID });
-  }
+
+  document.querySelector("#result").style.display = "flex";
+}
+
+function resetRound() {
+  timer = ROUND_TIME;
+  timerSteps = 0;
+  document.querySelector("#timer").textContent = String(timer);
+  document.querySelector("#result").style.display = "none";
+
+  player1.reset();
+  player2.reset();
+
+  gsap.killTweensOf("#player1HP");
+  gsap.killTweensOf("#player2HP");
+  gsap.set("#player1HP", { width: "100%" });
+  gsap.set("#player2HP", { width: "100%" });
+
+  gameState = "fighting";
+}
+
+function loadImages(images) {
+  return Promise.all(
+    images.map((image) => {
+      if (image.complete && image.naturalWidth > 0) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        image.addEventListener("load", () => resolve(), { once: true });
+        image.addEventListener(
+          "error",
+          () => reject(new Error("Failed to load " + image.src)),
+          { once: true }
+        );
+      });
+    })
+  );
 }

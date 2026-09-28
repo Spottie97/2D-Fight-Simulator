@@ -1,196 +1,94 @@
-<head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-    rel="stylesheet"
-  />
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: "Press Start 2P", cursive;
-    }
-  </style>
-</head>
-<body>
-  <!--Red Container div-->
-  <div style="position: relative; display: inline-block">
-    <!--Smaller Red container div-->
-    <div
-      style="
-        position: absolute;
-        display: flex;
-        width: 100%;
-        align-items: center;
-        padding: 20px;
-      "
-    >
-      <!--Player1 HP-->
-      <div
-        style="
-          position: relative;
-          width: 100%;
-          display: flex;
-          justify-content: flex-end;
-          border-top: 4px solid gold;
-          border-left: 4px solid gold;
-          border-bottom: 4px solid gold;
-        "
-      >
-        <div style="background-color: red; height: 30px; width: 100%"></div>
-        <div
-          id="player1HP"
-          style="
-            position: absolute;
-            background: #67e8f9;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-          "
-        ></div>
-      </div>
-      <!--Timer-->
-      <div
-        id="timer"
-        style="
-          background-color: black;
-          height: 50px;
-          width: 100px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          border: 4px solid gold;
-        "
-      >
-        10
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2D Fight Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="game">
+      <div class="hud">
+        <div class="health health-player1">
+          <div class="health-track"></div>
+          <div id="player1HP" class="health-fill"></div>
+        </div>
+        <div id="timer" class="timer">60</div>
+        <div class="health health-player2">
+          <div class="health-track"></div>
+          <div id="player2HP" class="health-fill"></div>
+        </div>
       </div>
 
-      <!--Player2 HP-->
-      <div
-        style="
-          position: relative;
-          width: 100%;
-          border-top: 4px solid gold;
-          border-right: 4px solid gold;
-          border-bottom: 4px solid gold;
-        "
-      >
-        <div style="background-color: red; height: 30px"></div>
-        <div
-          id="player2HP"
-          style="
-            position: absolute;
-            background: #67e8f9;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-          "
-        ></div>
+      <div id="result" class="result">
+        <div class="result-card">
+          <p id="resultTitle" class="result-title">Tie</p>
+          <p class="result-hint">Press R to restart</p>
+          <button id="restartButton" class="restart-button" type="button">
+            Restart
+          </button>
+        </div>
       </div>
-      <div></div>
+
+      <canvas></canvas>
+
+      <div class="controls">
+        <div class="controls-players">
+          <section class="controls-card controls-card-player1">
+            <h2>Player 1</h2>
+            <div class="control-row">
+              <span>Move</span>
+              <span class="keys"><kbd>A</kbd><kbd>D</kbd></span>
+            </div>
+            <div class="control-row">
+              <span>Jump</span>
+              <kbd>W</kbd>
+            </div>
+            <div class="control-row">
+              <span>Attack</span>
+              <kbd class="kbd-wide">Space</kbd>
+            </div>
+          </section>
+          <section class="controls-card controls-card-player2">
+            <h2>Player 2</h2>
+            <div class="control-row">
+              <span>Move</span>
+              <span class="keys"><kbd>←</kbd><kbd>→</kbd></span>
+            </div>
+            <div class="control-row">
+              <span>Jump</span>
+              <kbd>↑</kbd>
+            </div>
+            <div class="control-row">
+              <span>Attack</span>
+              <kbd>Enter</kbd>
+            </div>
+          </section>
+        </div>
+        <div class="controls-shared">
+          <span class="shared-hint"><kbd>R</kbd> Restart</span>
+          <span class="shared-hint"><kbd>F</kbd> Fullscreen</span>
+          <button id="fullscreenButton" class="fullscreen-button" type="button">
+            Fullscreen
+          </button>
+        </div>
+      </div>
     </div>
-    <div
-      id="EndTextTie"
-      style="
-        position: absolute;
-        color: white;
-        align-items: center;
-        justify-content: center;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: none;
-      "
-    >
-      Tie
-    </div>
-    <canvas></canvas>
-    <div
-      style="
-        background-color: black;
-        height: 200px;
-        width: 1024px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        border: 4px solid gold;
-      "
-    >
-      <div
-        style="
-          background-color: black;
-          position: absolute;
-          top: 576;
-          bottom: 0;
-          left: 0;
-          height: 200px;
-          width: 512px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: left ;
-          justify-content: left;
-          color: white;
-          border: 4px solid gold;
-        "
-      ><p>
-        <pre>Controls for Player 1:
 
-        Jump: W
-
-        Move Left: A
-
-        Move Right: D
-
-        Attack: Space Bar
-        </pre>
-      </p></div>
-      <div
-        style="
-          background-color: black;
-          position: absolute;
-          top: 576;
-          bottom: 0;
-          right: 0;
-          height: 200px;
-          width: 512px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: left ;
-          justify-content: left;
-          color: white;
-          border: 4px solid gold;
-        "
-      >
-      <p>
-        <pre>Controls for Player 2:
-
-        Jump: Up Arrow
-
-        Move Left: Left Arrow
-
-        Move Right: Right Arrow
-
-        Attack: Enter
-        </pre>
-      </p>
-  </div>
-    </div>
-  </div>
-
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"
-    integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
-  <script src="js/utilities.js"></script>
-  <script src="js/classes.js"></script>
-  <script src="index.js"></script>
-</body>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"
+      integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="js/utilities.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
