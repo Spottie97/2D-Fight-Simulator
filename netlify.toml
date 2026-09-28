@@ -1,0 +1,4 @@
+# Static site. Netlify's base directory is the game folder, and there is no build step.
+[build]
+  base = "2D-Fighters"
+  publish = "."

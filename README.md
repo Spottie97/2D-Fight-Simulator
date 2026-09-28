@@ -3,7 +3,7 @@
 Oda Clan Wars is a local two-player browser fighting game, inspired by titles such as Tekken and Mortal Kombat. Empty your opponent's health bar, or have more health left when the timer runs out.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/live-demo-brightgreen)](https://spiffy-frangipane-8eb0c2.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/live-demo-brightgreen)](https://oda-clan-wars.netlify.app/)
 
 ## Preview
 
@@ -63,7 +63,7 @@ No install or build step is required. The page loads [GSAP](https://greensock.co
 
 2. Open `2D-Fighters/index.html` in a browser.
 
-You can also play the hosted build: [live demo](https://spiffy-frangipane-8eb0c2.netlify.app/).
+You can also play the hosted build: [live demo](https://oda-clan-wars.netlify.app/).
 
 ## Project layout
 

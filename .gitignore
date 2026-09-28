@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Graphify knowledge graph output
 graphify-out/
+
+# Netlify CLI local link state (site id). Do not commit.
+.netlify/
