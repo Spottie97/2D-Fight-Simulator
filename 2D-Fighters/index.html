@@ -18,17 +18,28 @@
         <div class="health health-player1">
           <div class="health-track"></div>
           <div id="player1HP" class="health-fill"></div>
+          <div id="player1Wins" class="round-wins">
+            <span class="round-pip"></span>
+            <span class="round-pip"></span>
+          </div>
         </div>
         <div id="timer" class="timer">60</div>
         <div class="health health-player2">
           <div class="health-track"></div>
           <div id="player2HP" class="health-fill"></div>
+          <div id="player2Wins" class="round-wins">
+            <span class="round-pip"></span>
+            <span class="round-pip"></span>
+          </div>
         </div>
       </div>
+
+      <div id="announcer" class="announcer"></div>
 
       <div id="result" class="result">
         <div class="result-card">
           <p id="resultTitle" class="result-title">Tie</p>
+          <p id="resultScore" class="result-score"></p>
           <p class="result-hint">Press R to restart</p>
           <button id="restartButton" class="restart-button" type="button">
             Restart

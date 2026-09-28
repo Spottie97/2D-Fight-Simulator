@@ -236,6 +236,7 @@ function update() {
 
   player1.velocity.x = 0;
   player2.velocity.x = 0;
+  tickPhase();
   if (gameState !== "fighting") return;
 
   handleMovement(player1);
@@ -289,7 +290,7 @@ function onKeyDown(event) {
   if (event.repeat) return;
 
   if (event.code === "KeyR") {
-    if (gameState === "over") resetRound();
+    if (gameState === "over") startMatch();
     return;
   }
 
@@ -326,7 +327,7 @@ window.addEventListener("blur", releaseKeys);
 
 document.querySelector("#restartButton").addEventListener("click", () => {
   if (gameState !== "over") return;
-  resetRound();
+  startMatch();
   document.querySelector("#restartButton").blur();
 });
 
@@ -384,7 +385,6 @@ loadImages(images)
   });
 
 function startGame() {
-  gameState = "fighting";
-  document.querySelector("#timer").textContent = String(timer);
+  startMatch();
   window.requestAnimationFrame(frame);
 }

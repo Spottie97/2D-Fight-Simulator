@@ -72,6 +72,34 @@ body {
   left: 0;
 }
 
+.round-wins {
+  position: absolute;
+  top: 100%;
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.health-player1 .round-wins {
+  left: 0;
+}
+
+.health-player2 .round-wins {
+  right: 0;
+  flex-direction: row-reverse;
+}
+
+.round-pip {
+  width: 14px;
+  height: 14px;
+  background: #111;
+  border: 2px solid gold;
+}
+
+.round-pip.won {
+  background: gold;
+}
+
 .timer {
   flex-shrink: 0;
   display: flex;
@@ -83,9 +111,28 @@ body {
   border: 4px solid gold;
 }
 
-.result {
+.announcer {
   position: absolute;
   z-index: 2;
+  top: 0;
+  right: 40px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 576px;
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.6;
+  text-align: center;
+  pointer-events: none;
+  -webkit-text-stroke: 8px black;
+  paint-order: stroke fill;
+}
+
+.result {
+  position: absolute;
+  z-index: 3;
   top: 0;
   right: 0;
   left: 0;
@@ -109,6 +156,11 @@ body {
 .result-title {
   margin: 0;
   font-size: 20px;
+}
+
+.result-score {
+  margin: 0;
+  font-size: 14px;
 }
 
 .result-hint {

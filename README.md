@@ -16,7 +16,9 @@ Earlier looks during development:
 
 ## About
 
-This is a two-player game played on one keyboard. There are no AI opponents. Each fighter starts with 100 health. A hit deals 20 damage. The round ends when a health bar reaches 0, or when the 60-second timer expires. If time runs out, the fighter with more health wins. Equal health is a tie. Press R or the Restart button to play the round again.
+This is a two-player game played on one keyboard. There are no AI opponents. Each fighter starts with 100 health. A hit deals 20 damage. The round ends when a health bar reaches 0, or when the 60-second timer expires. If time runs out, the fighter with more health wins. Equal health is a draw, and that round is played again.
+
+Matches are best of 3. The first player to win 2 rounds wins, and the next round starts on its own. Press R or the Restart button after the match to play again.
 
 ## Features
 
@@ -25,7 +27,7 @@ This is a two-player game played on one keyboard. There are no AI opponents. Eac
 - Fighters turn to face each other, including after they cross sides
 - Sprite animations for idle, run, jump, fall, attack, take hit, and death
 - Health bars animated with GSAP
-- A 60-second round timer and a win or tie overlay
+- A 60-second round timer and a best-of-3 match, with round wins shown under each health bar
 - Restart with R or the on-screen button
 - The game scales to fit the browser window, and F or the Fullscreen button enters fullscreen
 - A forest background with an animated shop
@@ -45,7 +47,7 @@ Planned, and not in the game yet:
 | Move right | D | Right arrow |
 | Jump | W | Up arrow |
 | Attack | Space | Enter |
-| Restart after the round | R | R |
+| Restart after the match | R | R |
 | Fullscreen | F | F |
 
 The move, attack, restart, and fullscreen controls are shown under the fight.
@@ -73,7 +75,7 @@ You can also play the hosted build: [live demo](https://oda-clan-wars.netlify.ap
   css/style.css     Layout and HUD styles
   index.js          Canvas setup, fighters, input, and the game loop
   js/classes.js     Sprite and Fighter behavior
-  js/utilities.js   Collision, round timer, and win or restart flow
+  js/utilities.js   Collision, round timer, and best-of-3 match flow
   Assets/           Background, shop, and fighter sprites
 ```
 
